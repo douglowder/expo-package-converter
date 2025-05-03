@@ -9,12 +9,13 @@ const HOME_DIR =
   process.platform == 'win32' ? process.env.USERPROFILE : process.env.HOME
 const CONFIG_FILE_PATH = join(HOME_DIR, CONFIG_FILE_NAME)
 const DEFAULT_CONFIG_DATA: ConfigData = {
+  validExpoVersions: [52, 53],
   tvVersions: {
-    '52': {
+    52: {
       '@react-native-tvos/config-tv': '0.1.1',
       'react-native-tvos': '0.77.2-0',
     },
-    '53': {
+    53: {
       '@react-native-tvos/config-tv': '0.1.1',
       'react-native-tvos': '0.79.2-0',
     },

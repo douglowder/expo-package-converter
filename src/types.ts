@@ -6,6 +6,7 @@ export type ExpoTVConfig = {
 export type ExpoTVVersions = { [key: string]: ExpoTVConfig }
 
 export type ConfigData = {
+  validExpoVersions: number[]
   tvVersions: ExpoTVVersions
 }
 
