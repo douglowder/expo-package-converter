@@ -1,4 +1,5 @@
 import type { PackageJSON } from 'gluegun/build/types/toolbox/meta-types'
+import type { ExpoConfig } from '@expo/config-types'
 
 export type ExpoTVConfig = {
   '@react-native-tvos/config-tv': string
@@ -23,5 +24,14 @@ export type PackageJSONModifierParams = {
 
 export type PackageJSONModifier = (
   packageJson: PackageJSON,
-  params: PackageJSONModifierParams
+  params?: PackageJSONModifierParams | undefined
 ) => PackageJSON
+
+export type ExpoConfigModifierParams = {
+  // nothing yet
+}
+
+export type ExpoConfigModifier = (
+  expoConfig: ExpoConfig,
+  params: ExpoConfigModifierParams
+) => ExpoConfig

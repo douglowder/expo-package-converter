@@ -67,9 +67,7 @@ const addReactNativeTVDependency: PackageJSONModifier = (
 }
 
 const addExpoReactNativeExclusion: PackageJSONModifier = (
-  packageJson: PackageJSON,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _params: PackageJSONModifierParams
+  packageJson: PackageJSON
 ): PackageJSON => {
   if (!packageJson) {
     throw new Error('No package.json specified')

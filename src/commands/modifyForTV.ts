@@ -44,7 +44,7 @@ module.exports = {
 
     const modifiers: {
       method: PackageJSONModifier
-      params: PackageJSONModifierParams
+      params?: PackageJSONModifierParams | undefined
     }[] = [
       {
         method: toolbox.packageMods.addReactNativeTVDependency,
@@ -54,7 +54,6 @@ module.exports = {
       },
       {
         method: toolbox.packageMods.addExpoReactNativeExclusion,
-        params: {},
       },
       {
         method: toolbox.packageMods.modifyTVConfigPluginDependency,
@@ -74,6 +73,24 @@ module.exports = {
     await toolbox.filesystem.writeAsync(
       'package.json',
       JSON.stringify(newPackageJson, null, 2)
+    )
+
+    const appJson = await toolbox.filesystem.readAsync('app.json', 'json')
+
+    if (!appJson) {
+      info('No app.json found')
+      return
+    }
+
+    const newAppJson = toolbox.expoConfigMods.modifyExpoConfig(appJson, [
+      { method: toolbox.expoConfigMods.modifyExpoConfigForTV },
+    ])
+
+    info(`New app.json: ${JSON.stringify(newAppJson, null, 2)}`)
+
+    await toolbox.filesystem.writeAsync(
+      'app.json',
+      JSON.stringify(newAppJson, null, 2)
     )
   },
 }
