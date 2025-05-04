@@ -1,7 +1,7 @@
 import { GluegunToolbox } from 'gluegun'
 
 import type { ExpoConfig } from '@expo/config-types'
-import { ExpoConfigModifier, ExpoConfigModifierParams } from '../types'
+import { ExpoConfigModifier } from '../types'
 
 const addPlugin = (expoConfig: ExpoConfig, pluginName: string): ExpoConfig => {
   return {
@@ -39,23 +39,24 @@ const removeDevClientFromExpoConfigPlugins = (
   }
 }
 
+const expoConfigMods = {
+  addTVToExpoConfigPlugins,
+  removeDevClientFromExpoConfigPlugins,
+}
+
 const modifyExpoConfig = (
   expoConfig: ExpoConfig,
-  modifiers: {
-    method: ExpoConfigModifier
-    params?: ExpoConfigModifierParams
-  }[]
+  modifiers: ExpoConfigModifier[]
 ): ExpoConfig =>
-  modifiers.reduce(
-    (expoConfigAcc, modifier) =>
-      modifier.method(expoConfigAcc, modifier.params),
-    expoConfig
-  )
+  modifiers.reduce((expoConfigAcc, modifier) => {
+    if (typeof modifier === 'string') {
+      return expoConfigMods[modifier](expoConfigAcc)
+    }
+    return expoConfigMods[modifier[0]](expoConfigAcc, modifier[1])
+  }, expoConfig)
 
 module.exports = (toolbox: GluegunToolbox) => {
   toolbox.expoConfigMods = {
-    addTVToExpoConfigPlugins,
-    removeDevClientFromExpoConfigPlugins,
     modifyExpoConfig,
   }
 }

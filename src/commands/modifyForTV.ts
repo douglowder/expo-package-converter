@@ -1,5 +1,4 @@
 import { GluegunToolbox } from 'gluegun'
-import { PackageJSONModifier, PackageJSONModifierParams } from '../types'
 
 module.exports = {
   name: 'modifyForTV',
@@ -42,34 +41,18 @@ module.exports = {
 
     info(`TV versions: ${JSON.stringify(tvVersions, null, 2)}`)
 
-    const modifiers: {
-      method: PackageJSONModifier
-      params?: PackageJSONModifierParams | undefined
-    }[] = [
-      {
-        method: toolbox.packageMods.addReactNativeTVDependency,
-        params: {
-          newVersion: tvVersions['react-native-tvos'],
-        },
-      },
-      {
-        method: toolbox.packageMods.addExpoReactNativeExclusion,
-      },
-      {
-        method: toolbox.packageMods.modifyTVConfigPluginDependency,
-        params: {
-          newVersion: tvVersions['@react-native-tvos/config-tv'],
-        },
-      },
-      {
-        method: toolbox.packageMods.removeDevClientIfPresent,
-      },
-    ]
-
-    const newPackageJson = toolbox.packageMods.modifyPackageJson(
-      packageJson,
-      modifiers
-    )
+    const newPackageJson = toolbox.packageMods.modifyPackageJson(packageJson, [
+      [
+        'addReactNativeTVDependency',
+        { newVersion: tvVersions['react-native-tvos'] },
+      ],
+      [
+        'addTVConfigPluginDependency',
+        { newVersion: tvVersions['@react-native-tvos/config-tv'] },
+      ],
+      'addExpoReactNativeExclusion',
+      'removeDevClientIfPresent',
+    ])
 
     info(`New package.json: ${JSON.stringify(newPackageJson, null, 2)}`)
 
@@ -88,8 +71,8 @@ module.exports = {
     const newAppJson = {
       ...appJson,
       expo: toolbox.expoConfigMods.modifyExpoConfig(appJson.expo, [
-        { method: toolbox.expoConfigMods.addTVToExpoConfigPlugins },
-        { method: toolbox.expoConfigMods.removeDevClientFromExpoConfigPlugins },
+        'addTVToExpoConfigPlugins',
+        'removeDevClientFromExpoConfigPlugins',
       ]),
     }
 

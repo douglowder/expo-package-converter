@@ -17,7 +17,7 @@ const _modifyDependency = (
   },
 })
 
-const modifyReactNativeDependency: PackageJSONModifier = (
+const modifyReactNativeDependency = (
   packageJson: PackageJSON,
   params: PackageJSONModifierParams
 ): PackageJSON => {
@@ -31,7 +31,7 @@ const modifyReactNativeDependency: PackageJSONModifier = (
   return _modifyDependency(packageJson, 'react-native', newVersion)
 }
 
-const modifyTVConfigPluginDependency: PackageJSONModifier = (
+const addTVConfigPluginDependency = (
   packageJson: PackageJSON,
   params: PackageJSONModifierParams
 ): PackageJSON => {
@@ -50,7 +50,7 @@ const modifyTVConfigPluginDependency: PackageJSONModifier = (
   )
 }
 
-const addReactNativeTVDependency: PackageJSONModifier = (
+const addReactNativeTVDependency = (
   packageJson: PackageJSON,
   params: PackageJSONModifierParams
 ): PackageJSON => {
@@ -66,9 +66,7 @@ const addReactNativeTVDependency: PackageJSONModifier = (
   })
 }
 
-const addExpoReactNativeExclusion: PackageJSONModifier = (
-  packageJson: PackageJSON
-): PackageJSON => {
+const addExpoReactNativeExclusion = (packageJson: PackageJSON): PackageJSON => {
   if (!packageJson) {
     throw new Error('No package.json specified')
   }
@@ -87,9 +85,7 @@ const addExpoReactNativeExclusion: PackageJSONModifier = (
   }
 }
 
-const removeDevClientIfPresent: PackageJSONModifier = (
-  packageJson: PackageJSON
-): PackageJSON => {
+const removeDevClientIfPresent = (packageJson: PackageJSON): PackageJSON => {
   if (!packageJson) {
     throw new Error('No package.json specified')
   }
@@ -123,27 +119,28 @@ const expoVersion = (
   return version.major
 }
 
+const packageMods = {
+  addExpoReactNativeExclusion,
+  addReactNativeTVDependency,
+  modifyReactNativeDependency,
+  addTVConfigPluginDependency,
+  removeDevClientIfPresent,
+}
+
 const modifyPackageJson = (
   packageJson: PackageJSON,
-  modifiers: {
-    method: PackageJSONModifier
-    params: PackageJSONModifierParams
-  }[]
+  modifiers: PackageJSONModifier[]
 ): PackageJSON =>
-  modifiers.reduce(
-    (packageJsonAcc, modifier) =>
-      modifier.method(packageJsonAcc, modifier.params),
-    packageJson
-  )
+  modifiers.reduce((packageJsonAcc, modifier) => {
+    if (typeof modifier === 'string') {
+      return packageMods[modifier](packageJsonAcc)
+    }
+    return packageMods[modifier[0]](packageJsonAcc, modifier[1])
+  }, packageJson)
 
 module.exports = (toolbox: GluegunToolbox) => {
   toolbox.packageMods = {
     expoVersion,
-    addExpoReactNativeExclusion,
-    addReactNativeTVDependency,
-    modifyReactNativeDependency,
-    modifyTVConfigPluginDependency,
     modifyPackageJson,
-    removeDevClientIfPresent,
   }
 }
