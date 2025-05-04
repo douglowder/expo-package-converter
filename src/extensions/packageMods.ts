@@ -2,8 +2,9 @@ import { GluegunToolbox } from 'gluegun'
 import { minVersion, parse, SemVer } from 'semver'
 
 import type { PackageJSON } from 'gluegun/build/types/toolbox/meta-types'
+import type { PackageJSONModifier, PackageJSONModifierParams } from '../types'
 
-const modifyDependency = (
+const _modifyDependency = (
   packageJson: PackageJSON,
   dependencyName: string,
   newVersion: string,
@@ -16,18 +17,32 @@ const modifyDependency = (
   },
 })
 
-const modifyReactNativeDependency = (
+const modifyReactNativeDependency: PackageJSONModifier = (
   packageJson: PackageJSON,
-  newVersion: string
+  params: PackageJSONModifierParams
 ): PackageJSON => {
-  return modifyDependency(packageJson, 'react-native', newVersion)
+  if (!packageJson) {
+    throw new Error('No package.json specified')
+  }
+  const { newVersion } = params
+  if (!newVersion) {
+    throw new Error('No new version specified')
+  }
+  return _modifyDependency(packageJson, 'react-native', newVersion)
 }
 
-const modifyTVConfigPluginDependency = (
+const modifyTVConfigPluginDependency: PackageJSONModifier = (
   packageJson: PackageJSON,
-  newVersion: string
+  params: PackageJSONModifierParams
 ): PackageJSON => {
-  return modifyDependency(
+  if (!packageJson) {
+    throw new Error('No package.json specified')
+  }
+  const { newVersion } = params
+  if (!newVersion) {
+    throw new Error('No new version specified')
+  }
+  return _modifyDependency(
     packageJson,
     '@react-native-tvos/config-tv',
     newVersion,
@@ -35,17 +50,30 @@ const modifyTVConfigPluginDependency = (
   )
 }
 
-const addReactNativeTVDependency = (
+const addReactNativeTVDependency: PackageJSONModifier = (
   packageJson: PackageJSON,
-  tvVersion: string
+  params: PackageJSONModifierParams
 ): PackageJSON => {
-  return modifyReactNativeDependency(
-    packageJson,
-    `react-native:npm:react-native-tvos@${tvVersion}`
-  )
+  if (!packageJson) {
+    throw new Error('No package.json specified')
+  }
+  const { newVersion } = params
+  if (!newVersion) {
+    throw new Error('No new version specified')
+  }
+  return modifyReactNativeDependency(packageJson, {
+    newVersion: `react-native:npm:react-native-tvos@${newVersion}`,
+  })
 }
 
-const addExpoReactNativeExclusion = (packageJson: PackageJSON): PackageJSON => {
+const addExpoReactNativeExclusion: PackageJSONModifier = (
+  packageJson: PackageJSON,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _params: PackageJSONModifierParams
+): PackageJSON => {
+  if (!packageJson) {
+    throw new Error('No package.json specified')
+  }
   return {
     ...packageJson,
     expo: {
@@ -82,6 +110,19 @@ const expoVersion = (
   return version.major
 }
 
+const modifyPackageJson = (
+  packageJson: PackageJSON,
+  modifiers: {
+    method: PackageJSONModifier
+    params: PackageJSONModifierParams
+  }[]
+): PackageJSON =>
+  modifiers.reduce(
+    (packageJsonAcc, modifier) =>
+      modifier.method(packageJsonAcc, modifier.params),
+    packageJson
+  )
+
 module.exports = (toolbox: GluegunToolbox) => {
   toolbox.packageMods = {
     expoVersion,
@@ -89,5 +130,6 @@ module.exports = (toolbox: GluegunToolbox) => {
     addReactNativeTVDependency,
     modifyReactNativeDependency,
     modifyTVConfigPluginDependency,
+    modifyPackageJson,
   }
 }

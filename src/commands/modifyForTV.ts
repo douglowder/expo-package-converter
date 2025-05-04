@@ -1,4 +1,5 @@
 import { GluegunToolbox } from 'gluegun'
+import { PackageJSONModifier, PackageJSONModifierParams } from '../types'
 
 module.exports = {
   name: 'modifyForTV',
@@ -40,5 +41,39 @@ module.exports = {
     }
 
     info(`TV versions: ${JSON.stringify(tvVersions, null, 2)}`)
+
+    const modifiers: {
+      method: PackageJSONModifier
+      params: PackageJSONModifierParams
+    }[] = [
+      {
+        method: toolbox.packageMods.addReactNativeTVDependency,
+        params: {
+          newVersion: tvVersions['react-native-tvos'],
+        },
+      },
+      {
+        method: toolbox.packageMods.addExpoReactNativeExclusion,
+        params: {},
+      },
+      {
+        method: toolbox.packageMods.modifyTVConfigPluginDependency,
+        params: {
+          newVersion: tvVersions['@react-native-tvos/config-tv'],
+        },
+      },
+    ]
+
+    const newPackageJson = toolbox.packageMods.modifyPackageJson(
+      packageJson,
+      modifiers
+    )
+
+    info(`New package.json: ${JSON.stringify(newPackageJson, null, 2)}`)
+
+    await toolbox.filesystem.writeAsync(
+      'package.json',
+      JSON.stringify(newPackageJson, null, 2)
+    )
   },
 }
