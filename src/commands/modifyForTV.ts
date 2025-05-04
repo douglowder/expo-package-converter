@@ -61,6 +61,9 @@ module.exports = {
           newVersion: tvVersions['@react-native-tvos/config-tv'],
         },
       },
+      {
+        method: toolbox.packageMods.removeDevClientIfPresent,
+      },
     ]
 
     const newPackageJson = toolbox.packageMods.modifyPackageJson(

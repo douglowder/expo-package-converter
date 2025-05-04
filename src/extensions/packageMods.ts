@@ -62,7 +62,7 @@ const addReactNativeTVDependency: PackageJSONModifier = (
     throw new Error('No new version specified')
   }
   return modifyReactNativeDependency(packageJson, {
-    newVersion: `react-native:npm:react-native-tvos@${newVersion}`,
+    newVersion: `npm:react-native-tvos@${newVersion}`,
   })
 }
 
@@ -83,6 +83,21 @@ const addExpoReactNativeExclusion: PackageJSONModifier = (
           'react-native',
         ],
       },
+    },
+  }
+}
+
+const removeDevClientIfPresent: PackageJSONModifier = (
+  packageJson: PackageJSON
+): PackageJSON => {
+  if (!packageJson) {
+    throw new Error('No package.json specified')
+  }
+  return {
+    ...packageJson,
+    dependencies: {
+      ...packageJson.dependencies,
+      'expo-dev-client': undefined,
     },
   }
 }
@@ -129,5 +144,6 @@ module.exports = (toolbox: GluegunToolbox) => {
     modifyReactNativeDependency,
     modifyTVConfigPluginDependency,
     modifyPackageJson,
+    removeDevClientIfPresent,
   }
 }
