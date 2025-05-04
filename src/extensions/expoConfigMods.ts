@@ -11,14 +11,32 @@ const addPlugin = (expoConfig: ExpoConfig, pluginName: string): ExpoConfig => {
 }
 
 const addTVToExpoConfigPlugins = (expoConfig: ExpoConfig): ExpoConfig => {
-  return addPlugin(expoConfig, '@react-native-tvos/config-tv')
-}
-
-const modifyExpoConfigForTV = (expoConfig: ExpoConfig): ExpoConfig => {
   if (!expoConfig) {
     throw new Error('No expo config specified')
   }
-  return addTVToExpoConfigPlugins(expoConfig)
+  return addPlugin(expoConfig, '@react-native-tvos/config-tv')
+}
+
+const removeDevClientFromExpoConfigPlugins = (
+  expoConfig: ExpoConfig
+): ExpoConfig => {
+  if (!expoConfig) {
+    throw new Error('No expo config specified')
+  }
+  return {
+    ...expoConfig,
+    plugins: (expoConfig.plugins ?? []).filter((plugin) => {
+      if (typeof plugin === 'string') {
+        return plugin !== 'expo-dev-client' && plugin !== 'expo-dev-launcher'
+      }
+      if (Array.isArray(plugin)) {
+        return (
+          plugin[0] !== 'expo-dev-client' && plugin[0] !== 'expo-dev-launcher'
+        )
+      }
+      return true
+    }),
+  }
 }
 
 const modifyExpoConfig = (
@@ -36,7 +54,8 @@ const modifyExpoConfig = (
 
 module.exports = (toolbox: GluegunToolbox) => {
   toolbox.expoConfigMods = {
-    modifyExpoConfigForTV,
+    addTVToExpoConfigPlugins,
+    removeDevClientFromExpoConfigPlugins,
     modifyExpoConfig,
   }
 }

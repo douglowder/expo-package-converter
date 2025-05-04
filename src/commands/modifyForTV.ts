@@ -85,9 +85,13 @@ module.exports = {
       return
     }
 
-    const newAppJson = toolbox.expoConfigMods.modifyExpoConfig(appJson, [
-      { method: toolbox.expoConfigMods.modifyExpoConfigForTV },
-    ])
+    const newAppJson = {
+      ...appJson,
+      expo: toolbox.expoConfigMods.modifyExpoConfig(appJson.expo, [
+        { method: toolbox.expoConfigMods.addTVToExpoConfigPlugins },
+        { method: toolbox.expoConfigMods.removeDevClientFromExpoConfigPlugins },
+      ]),
+    }
 
     info(`New app.json: ${JSON.stringify(newAppJson, null, 2)}`)
 
