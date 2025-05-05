@@ -1,9 +1,9 @@
 import { GluegunToolbox } from 'gluegun'
 
 module.exports = {
-  name: 'reset',
+  name: 'resetConfig',
   alias: ['r'],
-  description: 'Reset the config to the defaults',
+  description: 'Reset the CLI config to the defaults',
   run: async (toolbox: GluegunToolbox) => {
     const {
       print: { info },

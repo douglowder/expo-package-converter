@@ -1,5 +1,4 @@
 import { GluegunToolbox } from 'gluegun'
-import { minVersion, parse, SemVer } from 'semver'
 
 import type { PackageJSON } from 'gluegun/build/types/toolbox/meta-types'
 import type { PackageJSONModifier, PackageJSONModifierParams } from '../types'
@@ -98,27 +97,6 @@ const removeDevClientIfPresent = (packageJson: PackageJSON): PackageJSON => {
   }
 }
 
-const expoVersion = (
-  packageJson: PackageJSON,
-  info?: (message: string) => void | undefined
-): number | undefined => {
-  const expoString = packageJson.dependencies?.expo ?? ''
-  if (!expoString.length) {
-    return undefined
-  }
-  info && info(`Expo string: ${expoString}`)
-  let version: SemVer | null = null
-  try {
-    version = parse(minVersion(expoString))
-    if (!version) {
-      return undefined
-    }
-  } catch (e) {
-    return undefined
-  }
-  return version.major
-}
-
 const packageMods = {
   addExpoReactNativeExclusion,
   addReactNativeTVDependency,
@@ -140,7 +118,6 @@ const modifyPackageJson = (
 
 module.exports = (toolbox: GluegunToolbox) => {
   toolbox.packageMods = {
-    expoVersion,
     modifyPackageJson,
   }
 }
