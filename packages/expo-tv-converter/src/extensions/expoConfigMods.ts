@@ -1,7 +1,7 @@
 import { GluegunToolbox } from 'gluegun'
 
 import type { ExpoConfig } from '@expo/config-types'
-import { ExpoConfigModifier } from 'expo-config-modifier'
+import { ExpoConfigModifier } from 'expo-config-modifier/build'
 
 const addPlugin = (expoConfig: ExpoConfig, pluginName: string): ExpoConfig => {
   return {

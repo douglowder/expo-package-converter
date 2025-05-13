@@ -30,13 +30,12 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "expo-config-modifier": "*",
+    "expo-package-modifier": "*",
     "gluegun": "latest"
   },
-  "peerDependencies": {
-    "expo-config-modifier": "*",
-    "expo-package-modifier": "*"
-  },
   "devDependencies": {
+    "@expo/cli": "^0.24.13",
     "@types/jest": "^29.5.14",
     "@types/node": "^12.7.11",
     "@types/semver": "^7.7.0",

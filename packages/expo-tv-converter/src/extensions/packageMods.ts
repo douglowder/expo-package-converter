@@ -4,7 +4,7 @@ import type { PackageJSON } from 'gluegun/build/types/toolbox/meta-types'
 import type {
   PackageJSONModifier,
   PackageJSONModifierParams,
-} from 'expo-package-modifier'
+} from 'expo-package-modifier/build'
 
 const _modifyDependency = (
   packageJson: PackageJSON,
