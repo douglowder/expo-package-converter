@@ -1,5 +1,6 @@
 export {
+  PackageJSON,
   PackageJSONModifier,
   PackageJSONModifierMethod,
   PackageJSONModifierParams,
-} from './types'
+} from './src/types'

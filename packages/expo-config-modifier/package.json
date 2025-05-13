@@ -14,11 +14,8 @@
     "coverage": "jest --coverage"
   },
   "files": [
-    "build",
     "LICENSE",
-    "readme.md",
-    "docs",
-    "bin"
+    "build"
   ],
   "license": "MIT",
   "devDependencies": {

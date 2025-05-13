@@ -1,10 +1,10 @@
 import { GluegunToolbox } from 'gluegun'
 
-import type { PackageJSON } from 'gluegun/build/types/toolbox/meta-types'
 import type {
+  PackageJSON,
   PackageJSONModifier,
   PackageJSONModifierParams,
-} from 'expo-package-modifier/build'
+} from 'expo-package-modifier'
 
 const _modifyDependency = (
   packageJson: PackageJSON,

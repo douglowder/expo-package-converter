@@ -1,6 +1,14 @@
-import type { PackageJSON } from 'gluegun/build/types/toolbox/meta-types'
-
 // package.json modifier types
+
+export type PackageJSON = {
+  name: string
+  version: string
+  private?: boolean
+  dependencies?: { [key: string]: string }
+  devDependencies?: { [key: string]: string }
+  peerDependencies?: { [key: string]: string }
+  expo?: { [key: string]: any }
+} & { [key: string]: any }
 
 export type PackageJSONModifierParams = {
   newVersion?: string | undefined

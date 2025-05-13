@@ -2,4 +2,4 @@ export {
   ExpoConfigModifier,
   ExpoConfigModifierMethod,
   ExpoConfigModifierParams,
-} from './types'
+} from './src/types'
