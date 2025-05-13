@@ -1,20 +1,12 @@
 {
-  "name": "expo-tv-converter",
+  "name": "expo-config-modifier",
   "version": "0.0.1",
-  "description": "CLI for general modification of Expo managed (CNG) projects",
+  "description": "Methods and types for converting/modifying an Expo project's app.json",
   "private": true,
-  "types": "build/types/types.d.ts",
-  "bin": {
-    "expo-tv-converter": "bin/expo-tv-converter"
-  },
   "scripts": {
+    "prepare": "yarn build",
+    "build": "tsc -p .",
     "postinstall": "patch-package",
-    "clean-build": "rimraf -rf ./build",
-    "compile": "tsc -p .",
-    "copy-templates": "copyfiles ./src/templates/* ./build/templates",
-    "build": "yarn clean-build && yarn compile && yarn copy-templates",
-    "prepare": "yarn clean-build && yarn compile && yarn copy-templates",
-    "prepublishOnly": "yarn build",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
     "test": "jest",
     "watch": "jest --watch",
@@ -29,13 +21,6 @@
     "bin"
   ],
   "license": "MIT",
-  "dependencies": {
-    "gluegun": "latest"
-  },
-  "peerDependencies": {
-    "expo-config-modifier": "*",
-    "expo-package-modifier": "*"
-  },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^12.7.11",
@@ -65,11 +50,5 @@
   "prettier": {
     "semi": false,
     "singleQuote": true
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
-  "packageManager": "yarn@1.22.22"
+  }
 }

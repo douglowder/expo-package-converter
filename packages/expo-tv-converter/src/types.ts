@@ -1,6 +1,3 @@
-import type { PackageJSON } from 'gluegun/build/types/toolbox/meta-types'
-import type { ExpoConfig } from '@expo/config-types'
-
 // Saved configuration types
 
 export type ExpoTVConfig = {
@@ -19,31 +16,3 @@ export type Config = {
   data: ConfigData
   save: () => void
 }
-
-// package.json modifier types
-
-export type PackageJSONModifierParams = {
-  newVersion?: string | undefined
-}
-
-export type PackageJSONModifierMethod = (
-  packageJson: PackageJSON,
-  params?: PackageJSONModifierParams | undefined,
-  info?: (message: string) => void | undefined
-) => PackageJSON
-
-export type PackageJSONModifier = string | [string, PackageJSONModifierParams]
-
-// expo config modifier types
-
-export type ExpoConfigModifierParams = {
-  // nothing yet
-}
-
-export type ExpoConfigModifierMethod = (
-  expoConfig: ExpoConfig,
-  params: ExpoConfigModifierParams,
-  info?: (message: string) => void | undefined
-) => ExpoConfig
-
-export type ExpoConfigModifier = string | [string, ExpoConfigModifierParams]
