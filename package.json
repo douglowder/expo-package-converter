@@ -5,7 +5,7 @@
   "description": "Monorepo for Expo project modifier packages",
   "scripts": {
     "postinstall": "expo-yarn-workspaces check-workspace-dependencies",
-    "prepare": "lerna run prepare --parallel"
+    "prepare": "lerna run prepare --sort"
   },
   "workspaces": [
     "packages/*"
