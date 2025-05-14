@@ -1,4 +1,9 @@
 import { GluegunToolbox } from 'gluegun'
+import {
+  modifyExpoConfig,
+  modifyPackageJson,
+} from 'expo-package-converter-base'
+import { PackageJSONDependencyTypes } from 'expo-package-converter-base/src/types'
 
 module.exports = {
   name: 'modifyForTV',
@@ -21,24 +26,43 @@ module.exports = {
 
     info(`TV versions: ${JSON.stringify(tvVersions, null, 2)}`)
 
-    const newPackageJson = toolbox.packageMods.modifyPackageJson(packageJson, [
-      [
-        'addReactNativeTVDependency',
-        { newVersion: tvVersions['react-native-tvos'] },
-      ],
-      [
-        'addTVConfigPluginDependency',
-        { newVersion: tvVersions['@react-native-tvos/config-tv'] },
-      ],
-      'addExpoReactNativeExclusion',
-      'removeDevClientIfPresent',
+    const newPackageJson = modifyPackageJson(packageJson, [
+      {
+        dependencyChanges: [
+          {
+            dependencyName: 'react-native-tvos',
+            newVersion: `react-native@npm:react-native-tvos@${tvVersions['react-native-tvos']}`,
+          },
+          {
+            dependencyName: '@react-native-tvos/config-tv',
+            dependencyType: PackageJSONDependencyTypes.devDependencies,
+            newVersion: tvVersions['@react-native-tvos/config-tv'],
+          },
+          {
+            dependencyName: 'expo-dev-client',
+            newVersion: undefined,
+          },
+        ],
+      },
+      {
+        expoSectionModifier: (expoSection) => {
+          return {
+            ...expoSection,
+            install: {
+              ...expoSection.install,
+              exclude: [...expoSection.install.exclude, 'react-native'],
+            },
+          }
+        },
+      },
     ])
-
     await toolbox.utils.writePackageJson(newPackageJson)
 
-    const newExpoConfig = toolbox.expoConfigMods.modifyExpoConfig(expoConfig, [
-      'addTVToExpoConfigPlugins',
-      'removeDevClientFromExpoConfigPlugins',
+    const newExpoConfig = modifyExpoConfig(expoConfig, [
+      {
+        addedPlugins: ['@react-native-tvos/config-tv'],
+        removedPlugins: ['expo-dev-client', 'expo-dev-launcher'],
+      },
     ])
 
     await toolbox.utils.writeExpoConfig(newExpoConfig)

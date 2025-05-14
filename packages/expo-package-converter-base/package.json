@@ -1,7 +1,7 @@
 {
-  "name": "expo-package-modifier",
+  "name": "expo-package-converter-base",
   "version": "0.0.1",
-  "description": "Methods and types for converting/modifying an Expo project's package.json",
+  "description": "Base methods for modifying an Expo projects package.json and app.json",
   "private": true,
   "scripts": {
     "prepare": "yarn build",

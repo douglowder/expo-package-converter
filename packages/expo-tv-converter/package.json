@@ -30,8 +30,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "expo-config-modifier": "*",
-    "expo-package-modifier": "*",
+    "expo-package-converter-base": "*",
     "gluegun": "latest"
   },
   "devDependencies": {
