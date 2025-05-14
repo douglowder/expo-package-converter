@@ -47,10 +47,13 @@ module.exports = {
       {
         expoSectionModifier: (expoSection) => {
           return {
-            ...expoSection,
+            ...(expoSection ?? {}),
             install: {
-              ...expoSection.install,
-              exclude: [...expoSection.install.exclude, 'react-native'],
+              ...(expoSection?.install ?? {}),
+              exclude: [
+                ...(expoSection?.install?.exclude ?? {}),
+                'react-native',
+              ],
             },
           }
         },

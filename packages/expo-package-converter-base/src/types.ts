@@ -1,5 +1,5 @@
 // package.json modifier types
-import type { ExpoConfig } from '@expo/config-types'
+import type { ExpoConfig, PackageJSONConfig } from '@expo/config'
 
 export enum PackageJSONDependencyTypes {
   dependencies = 'dependencies',
@@ -15,7 +15,7 @@ export type PackageJSONExpoSectionModifier = (
   expoSection: PackageJSONExpoSection
 ) => PackageJSONExpoSection
 
-export type PackageJSON = {
+export type PackageJSON = PackageJSONConfig & {
   name: string
   version: string
   private?: boolean | undefined

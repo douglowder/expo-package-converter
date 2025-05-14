@@ -17,10 +17,11 @@ export const modifyPackageJson = (
     if (dependencyChanges) {
       packageJsonAcc = dependencyChanges.reduce((pkg, dependencyChange) => {
         const { dependencyName, newVersion, dependencyType } = dependencyChange
+        const _dependencyType = dependencyType || 'dependencies'
         return {
           ...pkg,
-          [dependencyType]: {
-            ...pkg[dependencyType],
+          [_dependencyType]: {
+            ...pkg[_dependencyType],
             [dependencyName]: newVersion,
           },
         }
@@ -39,13 +40,13 @@ const filteredExpoConfig = (
     return expoConfigAcc
   }
   removedPlugins.forEach((plugin) => {
-    if (typeof plugin === 'string') {
-      expoConfigAcc.plugins = expoConfigAcc.plugins.filter((p) => p !== plugin)
-    } else {
-      expoConfigAcc.plugins = expoConfigAcc.plugins.filter(
-        (p) => p[0] !== plugin[0]
-      )
-    }
+    expoConfigAcc.plugins = expoConfigAcc.plugins.filter((p) => {
+      if (typeof p === 'string') {
+        return p !== plugin
+      } else {
+        return p[0] !== plugin
+      }
+    })
   })
   return expoConfigAcc
 }
